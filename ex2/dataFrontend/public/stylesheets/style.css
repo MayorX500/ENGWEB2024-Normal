@@ -1,0 +1,42 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Helps maintain even column sizes */
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  vertical-align: top;
+  overflow: hidden; /* Ensures no spillover */
+}
+
+.scrollable-cell {
+  max-width: 150px; /* Adjust as needed for your layout */
+  overflow: hidden; /* Makes sure content that overflows is hidden */
+  text-overflow: ellipsis; /* Adds ellipsis when text overflows */
+  white-space: nowrap; /* Keeps the content on a single line */
+}
+
+.scrollable-content {
+  overflow-x: auto; /* Enables horizontal scrolling */
+  white-space: nowrap; /* Ensures content stays in a single line */
+  display: block; /* Treats content as block to apply overflow */
+}
+.header {
+  background-color: #343a40;
+  color: #ffffff;
+  padding: 1rem 0;
+}
+.header a {
+  color: #ffffff;
+  margin-right: 1rem;
+}
+a {
+  color: #00B7FF;
+}

@@ -1,0 +1,45 @@
+extends layout
+
+block content
+    .container
+      .row.mt-5
+        .col-md-12
+          h1.text-center Página de Entidade
+          h2 Identificador: #{entity.nipc}
+          h3 Nome: #{entity.nome}
+          
+          h4.mt-5 Contratos:
+          table.table.table-bordered.table-striped
+            thead
+              tr
+                th _id
+                th nAnuncio
+                th tipoprocedimento
+                th objectoContrato
+                th dataPublicacao
+                th dataCelebracaoContrato
+                th precoContratual
+                th prazoExecucao
+                th NIPC_entidade_comunicante
+                th entidade_comunicante
+                th fundamentacao
+            tbody
+              each contrato in entity.contratos
+                tr
+                  td
+                    a(href=`/${contrato._id}`)= contrato._id
+                  td= contrato.nAnuncio
+                  td= contrato.tipoprocedimento
+                  td= contrato.objectoContrato
+                  td= contrato.dataPublicacao
+                  td= contrato.dataCelebracaoContrato
+                  td= contrato.precoContratual
+                  td= contrato.prazoExecucao
+                  td= contrato.NIPC_entidade_comunicante
+                  td= contrato.entidade_comunicante
+                  td= contrato.fundamentacao
+
+          - var totalValue = entity.contratos.reduce((sum, contrato) => sum + parseFloat(contrato.precoContratual.replace(/[^0-9.-]+/g,"")), 0);
+          h4.mt-3 Somatório do valor dos contratos: #{totalValue.toFixed(2)}
+          
+          a.btn.btn-primary.mt-5(href='http://localhost:16001/') Voltar à página principal

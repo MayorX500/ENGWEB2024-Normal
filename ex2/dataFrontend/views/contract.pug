@@ -1,0 +1,43 @@
+extends layout
+
+block content
+    .container
+      .row.mt-5
+        .col-md-12
+          h1.text-center Página de Contrato
+          
+          dl
+            dt Identificador do Contrato
+            dd= contrato._id
+
+            dt Número do Anúncio
+            dd= contrato.nAnuncio
+
+            dt Tipo de Procedimento
+            dd= contrato.tipoprocedimento
+
+            dt Objecto do Contrato
+            dd= contrato.objectoContrato
+
+            dt Data de Publicação
+            dd= contrato.dataPublicacao
+
+            dt Data de Celebração do Contrato
+            dd= contrato.dataCelebracaoContrato
+
+            dt Preço Contratual
+            dd= contrato.precoContratual
+
+            dt Prazo de Execução
+            dd= contrato.prazoExecucao
+
+            dt NIPC da Entidade Comunicante
+            dd= contrato.NIPC_entidade_comunicante
+
+            dt Entidade Comunicante
+            dd= contrato.entidade_comunicante
+
+            dt Fundamentação
+            dd= contrato.fundamentacao
+
+          a.btn.btn-primary.mt-5(href='http://localhost:16001/') Voltar à página principal

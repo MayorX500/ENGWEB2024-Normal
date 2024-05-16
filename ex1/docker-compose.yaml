@@ -1,0 +1,12 @@
+name: mongo-engweb
+services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - 5000:27017
+    environment:
+      MONGO_INITDB_DATABASE: contratos
+    volumes:
+      - ./datasets:/mongo  # This mounts your local mongoDB folder to /mongo in the container
+      - ./init-scripts:/docker-entrypoint-initdb.d  # Assumes all your init scripts are in ./init-scripts

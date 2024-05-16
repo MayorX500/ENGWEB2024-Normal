@@ -1,0 +1,172 @@
+Queries Usadas:
+
+1. Quantos registos estão na base de dados;
+
+QUERY> db.contratos.countDocuments()
+
+RESULTADO> 36377
+
+
+2. Quantos registos de contratos têm o tipo de procedimento com valor "Ajuste Direto Regime Geral"?
+
+QUERY> db.contratos.countDocuments({ tipoprocedimento: "Ajuste Direto Regime Geral" })
+
+RESULTADO> 17067
+
+
+3. Qual a lista de entidades comunicantes (ordenada alfabeticamente e sem repetições)?
+
+QUERY> db.contratos.aggregate([{$group: {_id: "$entidade_comunicante"}},{$sort: { _id: 1 } },{$project: {_id: 0,entidade_comunicante: "$_id"}}])
+
+RESULTADO> [
+  { entidade_comunicante: 'A ARCIAL - Associação para Recuperação de Cidadãos Inadaptados de Oliveira do Hospital'
+  },
+  { entidade_comunicante: 'A Oficina Centro de Artes e Mesteres Tradicionais de Guimarães, CIPRL'
+  },
+  { entidade_comunicante: 'A. D. A. M. - Águas do Alto Minho, S. A.' },
+  { entidade_comunicante: 'ABIMOTA - Associação Nacional das Indústrias de Duas Rodas, Ferragens, Mobiliário e Afins'
+  },
+  { entidade_comunicante: 'ABMG - Águas do Baixo Mondego e Gândara, E. I. M., S. A.'
+  },
+  { entidade_comunicante: 'AC, Águas de Coimbra, E. M.' },
+  { entidade_comunicante: 'ACA - Associação Casa da Arquitectura' },
+  { entidade_comunicante: 'ACAPORAMA - Associação de Casas do Povo da Região Autonoma da Madeira'
+  },
+  { entidade_comunicante: 'ACISO - Associação Empresarial Ourém - Fátima'
+  },
+  { entidade_comunicante: 'ACLEM - Arte, Cultura e Lazer, Empresa Municipal, E. M.'
+  },
+  { entidade_comunicante: 'ACPMR - Associação Cluster Portugal Mineral Resources'
+  },
+  { entidade_comunicante: 'AD ELO Associação de Desenvolvimento Local da Bairrada e Mondego'
+  },
+  { entidade_comunicante: 'ADAE - Associação de Desenvolvimento da Alta Estremadura'
+  },
+  { entidade_comunicante: 'ADC - Águas da Covilhã, E. M.' },
+  { entidade_comunicante: 'ADD - Associação de Desenvolvimento do Dão'
+  },
+  { entidade_comunicante: 'ADEMINHO - Associação para o Desenvolvimento do Ensino Profissional do Alto Minho Interior'
+  },
+  { entidade_comunicante: 'ADENE - Agência para a Energia' },
+  { entidade_comunicante: 'ADEPTOLIVA - Associação para o Desenvolvimento do Ensino Profissional dos Concelhos de Tábua, Oliveira do Hospital e Arganil'
+  },
+  { entidade_comunicante: 'ADER-AL - Associação para o Desenvolvimento do Espaço Rural do Norte do Alentejo'
+  },
+  { entidade_comunicante: 'ADICE - Associação para o Desenvolvimento Integrado da Cidade de Ermesinde'
+  }
+]
+(...)
+*Como a lista de entidades comunicantes é muito extensa, não é possível apresentar a lista completa. Existem { total_entidades: 2220 } entidades comunicantes.*
+
+4. Qual a distribuição de contratos por tipo de procedimento (quantos contratos tem cada tipo de procedimento)?
+
+QUERY> db.contratos.aggregate([{$group: {_id: "$tipoprocedimento",count: { $sum: 1 }}},{$sort: { count: -1 }}])
+
+RESULTADO> [
+  { _id: 'Ajuste Direto Regime Geral', count: 17067 },
+  { _id: 'Consulta Prévia', count: 8000 },
+  { _id: 'Concurso público', count: 5300 },
+  { _id: 'Ao abrigo de acordo-quadro (art.º 259.º)', count: 4678 },
+  { _id: 'Ao abrigo de acordo-quadro (art.º 258.º)', count: 995 },
+  { _id: 'Contratação excluída II', count: 144 },
+  { _id: 'Consulta Prévia Simplificada', count: 96 },
+  { _id: 'Concurso limitado por prévia qualificação', count: 53 },
+  { _id: 'Setores especiais – isenção parte II', count: 39 },
+  { _id: 'Concurso público simplificado', count: 3 },
+  { _id: 'Procedimento de negociação', count: 1 },
+  {
+    _id: 'Consulta prévia ao abrigo do artigo 7º da Lei n.º 30/2021, de 21.05',
+    count: 1
+  }
+]
+
+
+5. Qual o montante global por entidade comunicante (somatório dos contratos associados a uma entidade)?
+
+QUERY> db.contratos.aggregate([{$addFields: {precoContratualConverted: {$convert: {input: "$precoContratual",to: "double",onError: 0,onNull: 0}}}},{$group: {_id: "$entidade_comunicante",totalAmount: { $sum: "$precoContratualConverted" }}},{$sort: { totalAmount: -1 }}])
+
+RESULTADO> [
+  { _id: 'Infraestruturas de Portugal', totalAmount: 200703573 },
+  {
+    _id: 'Unidade Local de Saúde de Santa Maria, E. P. E.',
+    totalAmount: 54651152
+  },
+  { _id: 'Autoridade Tributária e Aduaneira', totalAmount: 34420020 },
+  { _id: 'Estado Maior da Força Aérea', totalAmount: 24458614 },
+  {
+    _id: 'Secretaria-Geral do Ministério da Administração Interna',
+    totalAmount: 17238403
+  },
+  {
+    _id: 'Unidade Local de Saúde de Gaia/Espinho, E. P. E.',
+    totalAmount: 16026149
+  },
+  { _id: 'Município de Sintra', totalAmount: 15080933 },
+  {
+    _id: 'Ministério da Defesa Nacional - Marinha',
+    totalAmount: 14873803
+  },
+  {
+    _id: 'Unidade Local de Saúde do Alto Minho, E. P. E.',
+    totalAmount: 14640831
+  },
+  {
+    _id: 'Instituto Português de Oncologia de Lisboa Francisco Gentil, E. P. E.',
+    totalAmount: 13292568
+  },
+  {
+    _id: 'Unidade Local de Saúde do Algarve, E. P. E.',
+    totalAmount: 12751351
+  },
+  {
+    _id: 'Hospital Professor Doutor Fernando Fonseca, E. P. E.',
+    totalAmount: 12497407
+  },
+  { _id: 'Município de Lisboa', totalAmount: 11492123 },
+  { _id: 'Município de Coimbra', totalAmount: 11162879 },
+  {
+    _id: 'Direção Regional das Obras Públicas e Transportes Terrestres',
+    totalAmount: 10311052
+  },
+  {
+    _id: 'Centro Hospitalar e Universitário de Coimbra, E. P. E.',
+    totalAmount: 10290497
+  },
+  {
+    _id: 'Centro Hospitalar Universitário Lisboa Central, E. P. E.',
+    totalAmount: 10088256
+  },
+  {
+    _id: 'Hospital do Espírito Santo de Évora, EPE',
+    totalAmount: 9683938
+  },
+  { _id: 'BANCO DE PORTUGAL', totalAmount: 9474196 },
+  {
+    _id: 'Unidade Local de Saúde de São João, E. P. E.',
+    totalAmount: 9004360
+  }
+]
+Type "it" for more
+
+
+
+
+
+RESUMO
+Queries Usadas por ponto:
+1.
+db.contratos.countDocuments()
+
+2.
+db.contratos.countDocuments({ tipoprocedimento: "Ajuste Direto Regime Geral" })
+
+3.
+db.contratos.aggregate([{$group: {_id: "$entidade_comunicante"}},{$sort: { _id: 1 } },{$project: {_id: 0,entidade_comunicante: "$_id"}}])
+db.contratos.aggregate([{$group: {_id: "$entidade_comunicante"}},{$sort: { _id: 1 }},{$project: {_id: 0,entidade_comunicante: "$_id"}},{$count: "total_entidades" }])
+
+4.
+db.contratos.aggregate([{$group: {_id: "$tipoprocedimento",count: { $sum: 1 }}},{$sort: { count: -1 }}])
+
+5.
+db.contratos.aggregate([{$addFields: {precoContratualConverted: {$convert: {input: "$precoContratual",to: "double",onError: 0,onNull: 0}}}},{$group: {_id: "$entidade_comunicante",totalAmount: { $sum: "$precoContratualConverted" }}},{$sort: { totalAmount: -1 }}])
+

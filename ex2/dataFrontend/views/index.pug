@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  h1 Tabela de Contratos
+  table
+    thead
+      tr
+        th(class='id') ID
+        th(class='name') Nome Anúncio
+        th(class='type') Tipo de Procedimento
+        th(class='object') Objeto de Contrato
+        th(class='date') Data de Publicação
+        th(class='date') Data de Celebração de Contrato
+        th(class='price') Preço Contratual
+        th(class='execution-days') Prazo de Execução do Contrato (dias)
+        th(class='nipc') NIPC Entidade Comunicante
+        th(class='entity') Entidade Comunicante
+        th(class='foundation') Fundamentação
+    tbody
+      each item in data
+        tr
+          td
+            a(href=`/${item._id}`)= item._id
+          td= item.nAnuncio
+          td= item.tipoprocedimento
+          td(class='scrollable-cell')= item.objectoContrato
+          td= item.dataPublicacao
+          td= item.dataCelebracaoContrato
+          td= item.precoContratual
+          td= item.prazoExecucao
+          td
+            a(href=`/entidades/${item.NIPC_entidade_comunicante}`)= item.NIPC_entidade_comunicante
+          td(class='scrollable-cell')= item.entidade_comunicante
+          td(class='scrollable-cell')= item.fundamentacao
